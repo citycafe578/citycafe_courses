@@ -5,7 +5,8 @@ model = YOLO("yolov8n.pt")
 a = 1
 phone_height = 16
 real_distance = 50
-focal = 700
+focal = 2000 #筆電2000 桌機700
+
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 while True:
@@ -13,6 +14,7 @@ while True:
     if not ret:
         break
     frame = cv2.flip(frame, 1)
+    frame = cv2.resize(frame, (1920, 1080))
     
     results = model(frame)
 
