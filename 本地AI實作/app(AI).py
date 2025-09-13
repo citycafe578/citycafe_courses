@@ -9,7 +9,7 @@ game_map = {1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7', 8: '8', 9: '
 
 
 def ask_AI(game_map):
-    response: ChatResponse = chat(model='llama2', messages=[
+    response: ChatResponse = chat(model='TinyLlama', messages=[
     {
         'role': 'user',
         'content':f"""
