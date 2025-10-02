@@ -13,16 +13,17 @@ while True:
     ret, frame = cap.read()
     if not ret:
         break
-    frame = cv2.flip(frame, 1)
+    frame = cv2.flip(frame, 1)#
     frame = cv2.resize(frame, (1920, 1080))
     
     results = model(frame)
 
+    # 開始處理資訊
     for result in results:
         boxes = result.boxes.xyxy
         class_ids = result.boxes.cls
 
-        for i, box in enumerate(boxes):
+        for i, box in enumerate(boxes):#
             class_id = int(class_ids[i])
             if class_id == 67:
                 x1, y1, x2, y2 = map(int, box)
