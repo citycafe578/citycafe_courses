@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript 事件監聽示範</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .box {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button, input {
+      padding: 8px 12px;
+      font-size: 16px;
+    }
+    .spacer {
+      height: 1500px;
+      background: linear-gradient(white, #f0f0f0);
+      margin-top: 20px;
+      padding: 10px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>JavaScript 事件監聽練習</h1>
+
+  <!-- 1. 按鈕測試 (click, dblclick, mouseenter, mouseleave) -->
+  <div class="box">
+    <h3>滑鼠事件測試</h3>
+    <button id="btn">點我 / 連點兩下 / 滑鼠移入移出</button>
+  </div>
+
+  <!-- 2. 輸入框測試 (input, change, focus, blur) -->
+  <div class="box">
+    <h3>輸入框事件測試</h3>
+    <input type="text" id="input" placeholder="請在此輸入文字...">
+  </div>
+
+  <!-- 3. 表單測試 (submit) -->
+  <div class="box">
+    <h3>表單送出測試</h3>
+    <form id="form">
+      <input type="text" placeholder="表單輸入框">
+      <button type="submit">送出表單</button>
+    </form>
+  </div>
+
+  <!-- 4. 為了測試 scroll 建立的高區塊 -->
+  <div class="spacer">
+    <p>往下滾動頁面來測試 <code>scroll</code> 事件...</p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
