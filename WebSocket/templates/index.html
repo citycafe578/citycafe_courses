@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask + Socket.io 顏色分流 Demo</title>
+    <style>
+        body{
+            font-family: Arial,sans-serif;
+            padding: 20px;
+            background: #f5f6fa; 
+        }
+
+        #chat-box{
+            border: 1px solid #ccc;
+            height: 300px;
+            overflow-y: scroll;
+            padding: 10px;
+            background: #fff;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        /* 一對一訊息的專屬樣式 */
+        .system-msg {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+            font-size: 0.9em;
+            border-left: 4px solid #ffeeba;
+        }
+
+        /* 聊天訊息的樣式 */
+        .msg-row {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+        .user-tag {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        input{ 
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button{ 
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover{
+            background: #0056b3;
+        }
+    </style>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+
+    <h2>Socket.io 多人不同顏色 + 一對一 Demo</h2>
+    <div id="chat-box"></div>
+
+    <input type="text" id="msgInput" placeholder="輸入訊息...">
+    <button onclick="sendToServer()">發送</button>
+
+    <script>
+        const socket = io(); 
+        const chatBox = document.getElementById('chat-box');
+        let myColor = '#000';
+
+        // 監聽連線成功
+        socket.on('connect', () => {
+            appendSystemLog("連線成功，正在取得專屬設定...");
+        });
+
+        // 監聽「一對一」專屬訊息
+        socket.on('one_on_one_response', (data) => {
+            myColor = data.your_color;
+            // 渲染一對一訊息
+            const msgRow = document.createElement('div');
+            msgRow.className = "system-msg";
+            msgRow.innerHTML = `${data.msg} <br> <strong>您的顏色標籤為：<span style="color:${myColor}">■</span></strong>`;
+            chatBox.appendChild(msgRow);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+
+        // 監聽廣播回應（現在有帶顏色和用戶 ID）
+        socket.on('server_response', (data) => {
+            const msgRow = document.createElement('div');
+            msgRow.className = "msg-row";
+            
+            // 用後端傳來的顏色來上色該用戶的 ID
+            msgRow.innerHTML = `<span class="user-tag" style="color: ${data.color}">[玩家 ${data.user_id}]:</span> <span>${data.text}</span>`;
+            
+            chatBox.appendChild(msgRow);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+
+        // 發送至後端
+        function sendToServer(){
+            const input = document.getElementById('msgInput');
+            const message = input.value;
+
+            if(message){
+                socket.emit('client_message', message);
+                input.value = '';
+            }
+        }
+
+        // 單純顯示連線狀態的輔助函式
+        function appendSystemLog(text){
+            const msgRow = document.createElement('div');
+            msgRow.style.color = "#888";
+            msgRow.style.fontSize = "12px";
+            msgRow.textContent = `• ${text}`;
+            chatBox.appendChild(msgRow);
+        }
+    </script>
+</body>
+</html>
